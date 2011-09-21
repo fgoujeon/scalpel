@@ -548,6 +548,50 @@ namespace expression_creation_or_evaluation_policies
 		);
 	};
 
+	struct equal_to
+	{
+		static
+		semantic_entities::expression_t
+		evaluate
+		(
+			const semantic_entities::expression_t& left_operand,
+			const semantic_entities::expression_t& right_operand
+		)
+		{
+			return evaluate_equal_to_expression(left_operand, right_operand);
+		}
+
+		static
+		semantic_entities::expression_t
+		create
+		(
+			semantic_entities::expression_t left_operand,
+			semantic_entities::expression_t right_operand
+		);
+	};
+
+	struct not_equal_to
+	{
+		static
+		semantic_entities::expression_t
+		evaluate
+		(
+			const semantic_entities::expression_t& left_operand,
+			const semantic_entities::expression_t& right_operand
+		)
+		{
+			return evaluate_not_equal_to_expression(left_operand, right_operand);
+		}
+
+		static
+		semantic_entities::expression_t
+		create
+		(
+			semantic_entities::expression_t left_operand,
+			semantic_entities::expression_t right_operand
+		);
+	};
+
 }
 
 template<class Policy>

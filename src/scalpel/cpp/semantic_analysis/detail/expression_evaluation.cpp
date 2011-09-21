@@ -69,7 +69,7 @@ namespace
 			{
 			}
 
-			//fundamental types
+			//C++ fundamental types (NOT scalpel::semantic_entities::fundamental_type object)
 			template<class U>
 			semantic_entities::expression_t
 			operator()
@@ -114,7 +114,7 @@ namespace
 			{
 			}
 
-			//fundamental types
+			//C++ fundamental types (NOT scalpel::semantic_entities::fundamental_type object)
 			template<class T>
 			semantic_entities::expression_t
 			operator()
@@ -150,6 +150,131 @@ namespace
 		private:
 			const semantic_entities::expression_t& left_operand_;
 	};
+
+	namespace comparison_operation_policies
+	{
+		//all the comparison operation policies are based on this higher order policy
+		template<class OperationPolicy>
+		struct comparison
+		{
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1 a,
+				T2 b,
+				typename boost::disable_if_c
+				<
+					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
+					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
+				>::type* = 0,
+				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				return OperationPolicy::apply(a, b);
+			}
+
+			//avoid "comparison between signed and unsigned integer" warning
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c
+				<
+					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
+					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
+				>::type* = 0,
+				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+
+			//the comparison operators can't be applied to bool
+			template<typename T1, typename T2>
+			static
+			bool
+			apply
+			(
+				T1,
+				T2,
+				typename boost::enable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
+			)
+			{
+				assert(false);
+			}
+		};
+
+		struct less_than
+		{
+			template<typename T1, typename T2>
+			static
+			bool
+			apply(T1 a, T2 b)
+			{
+				return a < b;
+			}
+		};
+
+		struct less_than_or_equal_to
+		{
+			template<typename T1, typename T2>
+			static
+			bool
+			apply(T1 a, T2 b)
+			{
+				return a <= b;
+			}
+		};
+
+		struct greater_than
+		{
+			template<typename T1, typename T2>
+			static
+			bool
+			apply(T1 a, T2 b)
+			{
+				return a > b;
+			}
+		};
+
+		struct greater_than_or_equal_to
+		{
+			template<typename T1, typename T2>
+			static
+			bool
+			apply(T1 a, T2 b)
+			{
+				return a >= b;
+			}
+		};
+
+		struct equal_to
+		{
+			template<typename T1, typename T2>
+			static
+			bool
+			apply(T1 a, T2 b)
+			{
+				return a == b;
+			}
+		};
+
+		struct not_equal_to
+		{
+			template<typename T1, typename T2>
+			static
+			bool
+			apply(T1 a, T2 b)
+			{
+				return a != b;
+			}
+		};
+	}
 
 	namespace operation_policies
 	{
@@ -265,222 +390,35 @@ namespace
 			}
 		};
 
-		struct less_than
-		{
-			template<typename T1, typename T2>
-			static
-			bool
-			apply
-			(
-				T1 a,
-				T2 b,
-				typename boost::disable_if_c
-				<
-					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
-					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
-				>::type* = 0,
-				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
-			)
-			{
-				return a < b;
-			}
+		typedef
+			comparison_operation_policies::comparison<comparison_operation_policies::less_than>
+			less_than
+		;
 
-			//avoid "comparison between signed and unsigned integer" warning
-			template<typename T1, typename T2>
-			static
-			bool
-			apply
-			(
-				T1,
-				T2,
-				typename boost::enable_if_c
-				<
-					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
-					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
-				>::type* = 0,
-				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
-			)
-			{
-				assert(false);
-			}
+		typedef
+			comparison_operation_policies::comparison<comparison_operation_policies::less_than_or_equal_to>
+			less_than_or_equal_to
+		;
 
-			//the relational operators can't be applied to bool
-			template<typename T1, typename T2>
-			static
-			bool
-			apply
-			(
-				T1,
-				T2,
-				typename boost::enable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
-			)
-			{
-				assert(false);
-			}
-		};
+		typedef
+			comparison_operation_policies::comparison<comparison_operation_policies::greater_than>
+			greater_than
+		;
 
-		struct less_than_or_equal_to
-		{
-			template<typename T1, typename T2>
-			static
-			bool
-			apply
-			(
-				T1 a,
-				T2 b,
-				typename boost::disable_if_c
-				<
-					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
-					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
-				>::type* = 0,
-				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
-			)
-			{
-				return a <= b;
-			}
+		typedef
+			comparison_operation_policies::comparison<comparison_operation_policies::greater_than_or_equal_to>
+			greater_than_or_equal_to
+		;
 
-			//avoid "comparison between signed and unsigned integer" warning
-			template<typename T1, typename T2>
-			static
-			bool
-			apply
-			(
-				T1,
-				T2,
-				typename boost::enable_if_c
-				<
-					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
-					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
-				>::type* = 0,
-				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
-			)
-			{
-				assert(false);
-			}
+		typedef
+			comparison_operation_policies::comparison<comparison_operation_policies::equal_to>
+			equal_to
+		;
 
-			//the relational operators can't be applied to bool
-			template<typename T1, typename T2>
-			static
-			bool
-			apply
-			(
-				T1,
-				T2,
-				typename boost::enable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
-			)
-			{
-				assert(false);
-			}
-		};
-
-		struct greater_than
-		{
-			template<typename T1, typename T2>
-			static
-			bool
-			apply
-			(
-				T1 a,
-				T2 b,
-				typename boost::disable_if_c
-				<
-					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
-					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
-				>::type* = 0,
-				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
-			)
-			{
-				return a > b;
-			}
-
-			//avoid "comparison between signed and unsigned integer" warning
-			template<typename T1, typename T2>
-			static
-			bool
-			apply
-			(
-				T1,
-				T2,
-				typename boost::enable_if_c
-				<
-					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
-					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
-				>::type* = 0,
-				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
-			)
-			{
-				assert(false);
-			}
-
-			//the relational operators can't be applied to bool
-			template<typename T1, typename T2>
-			static
-			bool
-			apply
-			(
-				T1,
-				T2,
-				typename boost::enable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
-			)
-			{
-				assert(false);
-			}
-		};
-
-		struct greater_than_or_equal_to
-		{
-			template<typename T1, typename T2>
-			static
-			bool
-			apply
-			(
-				T1 a,
-				T2 b,
-				typename boost::disable_if_c
-				<
-					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
-					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
-				>::type* = 0,
-				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
-			)
-			{
-				return a >= b;
-			}
-
-			//avoid "comparison between signed and unsigned integer" warning
-			template<typename T1, typename T2>
-			static
-			bool
-			apply
-			(
-				T1,
-				T2,
-				typename boost::enable_if_c
-				<
-					(boost::is_signed<T1>::value && boost::is_unsigned<T2>::value) ||
-					(boost::is_unsigned<T1>::value && boost::is_signed<T2>::value)
-				>::type* = 0,
-				typename boost::disable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
-			)
-			{
-				assert(false);
-			}
-
-			//the relational operators can't be applied to bool
-			template<typename T1, typename T2>
-			static
-			bool
-			apply
-			(
-				T1,
-				T2,
-				typename boost::enable_if_c<boost::is_same<T1, bool>::value || boost::is_same<T2, bool>::value>::type* = 0
-			)
-			{
-				assert(false);
-			}
-		};
-
+		typedef
+			comparison_operation_policies::comparison<comparison_operation_policies::not_equal_to>
+			not_equal_to
+		;
 	}
 }
 
@@ -602,6 +540,28 @@ evaluate_greater_than_or_equal_to_expression
 )
 {
 	evaluate_binary_expression_visitor<operation_policies::greater_than_or_equal_to> visitor(left_operand);
+	return utility::apply_visitor(visitor, right_operand);
+}
+
+semantic_entities::expression_t
+evaluate_equal_to_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+)
+{
+	evaluate_binary_expression_visitor<operation_policies::equal_to> visitor(left_operand);
+	return utility::apply_visitor(visitor, right_operand);
+}
+
+semantic_entities::expression_t
+evaluate_not_equal_to_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+)
+{
+	evaluate_binary_expression_visitor<operation_policies::not_equal_to> visitor(left_operand);
 	return utility::apply_visitor(visitor, right_operand);
 }
 

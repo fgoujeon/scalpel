@@ -383,5 +383,37 @@ expression_creation_or_evaluation_policies::greater_than_or_equal_to::create
 	);
 }
 
+semantic_entities::expression_t
+expression_creation_or_evaluation_policies::equal_to::create
+(
+	semantic_entities::expression_t left_operand,
+	semantic_entities::expression_t right_operand
+)
+{
+	//TODO
+
+	return semantic_entities::equal_to_expression
+	(
+		left_operand,
+		right_operand
+	);
+}
+
+semantic_entities::expression_t
+expression_creation_or_evaluation_policies::not_equal_to::create
+(
+	semantic_entities::expression_t left_operand,
+	semantic_entities::expression_t right_operand
+)
+{
+	//TODO
+
+	return semantic_entities::not_equal_to_expression
+	(
+		left_operand,
+		right_operand
+	);
+}
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

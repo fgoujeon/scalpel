@@ -108,6 +108,20 @@ evaluate_greater_than_or_equal_to_expression
 	const semantic_entities::expression_t& right_operand
 );
 
+semantic_entities::expression_t
+evaluate_equal_to_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+);
+
+semantic_entities::expression_t
+evaluate_not_equal_to_expression
+(
+	const semantic_entities::expression_t& left_operand,
+	const semantic_entities::expression_t& right_operand
+);
+
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
 #endif

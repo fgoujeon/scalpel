@@ -348,13 +348,13 @@ create_expression_from_equality_expression
 		const syntax_nodes::equality_expression& right_operand_node = *opt_right_operand_node;
 
 		if(get<predefined_text_node<str::double_equal>>(&operator_node))
-			return semantic_entities::equal_to_expression
+			return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::equal_to>
 			(
 				create_expression_from_relational_expression(left_operand_node, declarative_region),
 				create_expression_from_equality_expression(right_operand_node, declarative_region)
 			);
 		else if(get<predefined_text_node<str::exclamation_equal>>(&operator_node))
-			return semantic_entities::not_equal_to_expression
+			return create_or_evaluate_binary_expression<expression_creation_or_evaluation_policies::not_equal_to>
 			(
 				create_expression_from_relational_expression(left_operand_node, declarative_region),
 				create_expression_from_equality_expression(right_operand_node, declarative_region)
