@@ -306,291 +306,45 @@ create_expression_from_literal(const syntax_nodes::literal& literal_node);
 
 namespace expression_creation_or_evaluation_policies
 {
-	struct addition
-	{
-		static
-		semantic_entities::expression_t
-		evaluate
-		(
-			const semantic_entities::expression_t& left_operand,
-			const semantic_entities::expression_t& right_operand
-		)
-		{
-			return evaluate_addition_expression(left_operand, right_operand);
-		}
 
-		static
-		semantic_entities::expression_t
-		create
-		(
-			semantic_entities::expression_t left_operand,
-			semantic_entities::expression_t right_operand
-		);
-	};
+#define BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(NAME) \
+struct NAME \
+{ \
+	static \
+	semantic_entities::expression_t \
+	evaluate \
+	( \
+		const semantic_entities::expression_t& left_operand, \
+		const semantic_entities::expression_t& right_operand \
+	) \
+	{ \
+		return evaluate_##NAME##_expression(left_operand, right_operand); \
+	} \
+ \
+	static \
+	semantic_entities::expression_t \
+	create \
+	( \
+		semantic_entities::expression_t left_operand, \
+		semantic_entities::expression_t right_operand \
+	); \
+};
 
-	struct subtraction
-	{
-		static
-		semantic_entities::expression_t
-		evaluate
-		(
-			const semantic_entities::expression_t& left_operand,
-			const semantic_entities::expression_t& right_operand
-		)
-		{
-			return evaluate_subtraction_expression(left_operand, right_operand);
-		}
+	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(addition)
+	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(subtraction)
+	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(multiplication)
+	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(division)
+	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(modulo)
+	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(left_shift)
+	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(right_shift)
+	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(less_than)
+	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(less_than_or_equal_to)
+	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(greater_than)
+	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(greater_than_or_equal_to)
+	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(equal_to)
+	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(not_equal_to)
 
-		static
-		semantic_entities::expression_t
-		create
-		(
-			semantic_entities::expression_t left_operand,
-			semantic_entities::expression_t right_operand
-		);
-	};
-
-	struct multiplication
-	{
-		static
-		semantic_entities::expression_t
-		evaluate
-		(
-			const semantic_entities::expression_t& left_operand,
-			const semantic_entities::expression_t& right_operand
-		)
-		{
-			return evaluate_multiplication_expression(left_operand, right_operand);
-		}
-
-		static
-		semantic_entities::expression_t
-		create
-		(
-			semantic_entities::expression_t left_operand,
-			semantic_entities::expression_t right_operand
-		);
-	};
-
-	struct division
-	{
-		static
-		semantic_entities::expression_t
-		evaluate
-		(
-			const semantic_entities::expression_t& left_operand,
-			const semantic_entities::expression_t& right_operand
-		)
-		{
-			return evaluate_division_expression(left_operand, right_operand);
-		}
-
-		static
-		semantic_entities::expression_t
-		create
-		(
-			semantic_entities::expression_t left_operand,
-			semantic_entities::expression_t right_operand
-		);
-	};
-
-	struct modulo
-	{
-		static
-		semantic_entities::expression_t
-		evaluate
-		(
-			const semantic_entities::expression_t& left_operand,
-			const semantic_entities::expression_t& right_operand
-		)
-		{
-			return evaluate_modulo_expression(left_operand, right_operand);
-		}
-
-		static
-		semantic_entities::expression_t
-		create
-		(
-			semantic_entities::expression_t left_operand,
-			semantic_entities::expression_t right_operand
-		);
-	};
-
-	struct left_shift
-	{
-		static
-		semantic_entities::expression_t
-		evaluate
-		(
-			const semantic_entities::expression_t& left_operand,
-			const semantic_entities::expression_t& right_operand
-		)
-		{
-			return evaluate_left_shift_expression(left_operand, right_operand);
-		}
-
-		static
-		semantic_entities::expression_t
-		create
-		(
-			semantic_entities::expression_t left_operand,
-			semantic_entities::expression_t right_operand
-		);
-	};
-
-	struct right_shift
-	{
-		static
-		semantic_entities::expression_t
-		evaluate
-		(
-			const semantic_entities::expression_t& left_operand,
-			const semantic_entities::expression_t& right_operand
-		)
-		{
-			return evaluate_right_shift_expression(left_operand, right_operand);
-		}
-
-		static
-		semantic_entities::expression_t
-		create
-		(
-			semantic_entities::expression_t left_operand,
-			semantic_entities::expression_t right_operand
-		);
-	};
-
-	struct less_than
-	{
-		static
-		semantic_entities::expression_t
-		evaluate
-		(
-			const semantic_entities::expression_t& left_operand,
-			const semantic_entities::expression_t& right_operand
-		)
-		{
-			return evaluate_less_than_expression(left_operand, right_operand);
-		}
-
-		static
-		semantic_entities::expression_t
-		create
-		(
-			semantic_entities::expression_t left_operand,
-			semantic_entities::expression_t right_operand
-		);
-	};
-
-	struct less_than_or_equal_to
-	{
-		static
-		semantic_entities::expression_t
-		evaluate
-		(
-			const semantic_entities::expression_t& left_operand,
-			const semantic_entities::expression_t& right_operand
-		)
-		{
-			return evaluate_less_than_or_equal_to_expression(left_operand, right_operand);
-		}
-
-		static
-		semantic_entities::expression_t
-		create
-		(
-			semantic_entities::expression_t left_operand,
-			semantic_entities::expression_t right_operand
-		);
-	};
-
-	struct greater_than
-	{
-		static
-		semantic_entities::expression_t
-		evaluate
-		(
-			const semantic_entities::expression_t& left_operand,
-			const semantic_entities::expression_t& right_operand
-		)
-		{
-			return evaluate_greater_than_expression(left_operand, right_operand);
-		}
-
-		static
-		semantic_entities::expression_t
-		create
-		(
-			semantic_entities::expression_t left_operand,
-			semantic_entities::expression_t right_operand
-		);
-	};
-
-	struct greater_than_or_equal_to
-	{
-		static
-		semantic_entities::expression_t
-		evaluate
-		(
-			const semantic_entities::expression_t& left_operand,
-			const semantic_entities::expression_t& right_operand
-		)
-		{
-			return evaluate_greater_than_or_equal_to_expression(left_operand, right_operand);
-		}
-
-		static
-		semantic_entities::expression_t
-		create
-		(
-			semantic_entities::expression_t left_operand,
-			semantic_entities::expression_t right_operand
-		);
-	};
-
-	struct equal_to
-	{
-		static
-		semantic_entities::expression_t
-		evaluate
-		(
-			const semantic_entities::expression_t& left_operand,
-			const semantic_entities::expression_t& right_operand
-		)
-		{
-			return evaluate_equal_to_expression(left_operand, right_operand);
-		}
-
-		static
-		semantic_entities::expression_t
-		create
-		(
-			semantic_entities::expression_t left_operand,
-			semantic_entities::expression_t right_operand
-		);
-	};
-
-	struct not_equal_to
-	{
-		static
-		semantic_entities::expression_t
-		evaluate
-		(
-			const semantic_entities::expression_t& left_operand,
-			const semantic_entities::expression_t& right_operand
-		)
-		{
-			return evaluate_not_equal_to_expression(left_operand, right_operand);
-		}
-
-		static
-		semantic_entities::expression_t
-		create
-		(
-			semantic_entities::expression_t left_operand,
-			semantic_entities::expression_t right_operand
-		);
-	};
+#undef BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY
 
 }
 

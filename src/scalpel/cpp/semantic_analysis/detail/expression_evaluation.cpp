@@ -422,148 +422,33 @@ namespace
 	}
 }
 
-semantic_entities::expression_t
-evaluate_addition_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-)
-{
-	evaluate_binary_expression_visitor<operation_policies::addition> visitor(left_operand);
-	return utility::apply_visitor(visitor, right_operand);
+#define EVALUATE_EXPRESSION(NAME) \
+semantic_entities::expression_t \
+evaluate_##NAME##_expression \
+( \
+	const semantic_entities::expression_t& left_operand, \
+	const semantic_entities::expression_t& right_operand \
+) \
+{ \
+	evaluate_binary_expression_visitor<operation_policies::NAME> visitor(left_operand); \
+	return utility::apply_visitor(visitor, right_operand); \
 }
 
-semantic_entities::expression_t
-evaluate_subtraction_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-)
-{
-	evaluate_binary_expression_visitor<operation_policies::subtraction> visitor(left_operand);
-	return utility::apply_visitor(visitor, right_operand);
-}
+EVALUATE_EXPRESSION(addition)
+EVALUATE_EXPRESSION(subtraction)
+EVALUATE_EXPRESSION(multiplication)
+EVALUATE_EXPRESSION(division)
+EVALUATE_EXPRESSION(modulo)
+EVALUATE_EXPRESSION(left_shift)
+EVALUATE_EXPRESSION(right_shift)
+EVALUATE_EXPRESSION(less_than)
+EVALUATE_EXPRESSION(less_than_or_equal_to)
+EVALUATE_EXPRESSION(greater_than)
+EVALUATE_EXPRESSION(greater_than_or_equal_to)
+EVALUATE_EXPRESSION(equal_to)
+EVALUATE_EXPRESSION(not_equal_to)
 
-semantic_entities::expression_t
-evaluate_multiplication_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-)
-{
-	evaluate_binary_expression_visitor<operation_policies::multiplication> visitor(left_operand);
-	return utility::apply_visitor(visitor, right_operand);
-}
-
-semantic_entities::expression_t
-evaluate_division_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-)
-{
-	evaluate_binary_expression_visitor<operation_policies::division> visitor(left_operand);
-	return utility::apply_visitor(visitor, right_operand);
-}
-
-semantic_entities::expression_t
-evaluate_modulo_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-)
-{
-	evaluate_binary_expression_visitor<operation_policies::modulo> visitor(left_operand);
-	return utility::apply_visitor(visitor, right_operand);
-}
-
-semantic_entities::expression_t
-evaluate_left_shift_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-)
-{
-	evaluate_binary_expression_visitor<operation_policies::left_shift> visitor(left_operand);
-	return utility::apply_visitor(visitor, right_operand);
-}
-
-semantic_entities::expression_t
-evaluate_right_shift_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-)
-{
-	evaluate_binary_expression_visitor<operation_policies::right_shift> visitor(left_operand);
-	return utility::apply_visitor(visitor, right_operand);
-}
-
-semantic_entities::expression_t
-evaluate_less_than_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-)
-{
-	evaluate_binary_expression_visitor<operation_policies::less_than> visitor(left_operand);
-	return utility::apply_visitor(visitor, right_operand);
-}
-
-semantic_entities::expression_t
-evaluate_less_than_or_equal_to_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-)
-{
-	evaluate_binary_expression_visitor<operation_policies::less_than_or_equal_to> visitor(left_operand);
-	return utility::apply_visitor(visitor, right_operand);
-}
-
-semantic_entities::expression_t
-evaluate_greater_than_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-)
-{
-	evaluate_binary_expression_visitor<operation_policies::greater_than> visitor(left_operand);
-	return utility::apply_visitor(visitor, right_operand);
-}
-
-semantic_entities::expression_t
-evaluate_greater_than_or_equal_to_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-)
-{
-	evaluate_binary_expression_visitor<operation_policies::greater_than_or_equal_to> visitor(left_operand);
-	return utility::apply_visitor(visitor, right_operand);
-}
-
-semantic_entities::expression_t
-evaluate_equal_to_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-)
-{
-	evaluate_binary_expression_visitor<operation_policies::equal_to> visitor(left_operand);
-	return utility::apply_visitor(visitor, right_operand);
-}
-
-semantic_entities::expression_t
-evaluate_not_equal_to_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-)
-{
-	evaluate_binary_expression_visitor<operation_policies::not_equal_to> visitor(left_operand);
-	return utility::apply_visitor(visitor, right_operand);
-}
+#undef EVALUATE_EXPRESSION
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

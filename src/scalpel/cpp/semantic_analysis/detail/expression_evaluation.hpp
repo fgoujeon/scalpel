@@ -31,96 +31,29 @@ evaluate_expression_to_unsigned_int(const semantic_entities::expression_t& expr)
 
 
 
-semantic_entities::expression_t
-evaluate_addition_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
+#define EVALUATE_EXPRESSION(NAME) \
+semantic_entities::expression_t \
+evaluate_##NAME##_expression \
+( \
+	const semantic_entities::expression_t& left_operand, \
+	const semantic_entities::expression_t& right_operand \
 );
 
-semantic_entities::expression_t
-evaluate_subtraction_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
+EVALUATE_EXPRESSION(addition)
+EVALUATE_EXPRESSION(subtraction)
+EVALUATE_EXPRESSION(multiplication)
+EVALUATE_EXPRESSION(division)
+EVALUATE_EXPRESSION(modulo)
+EVALUATE_EXPRESSION(left_shift)
+EVALUATE_EXPRESSION(right_shift)
+EVALUATE_EXPRESSION(less_than)
+EVALUATE_EXPRESSION(less_than_or_equal_to)
+EVALUATE_EXPRESSION(greater_than)
+EVALUATE_EXPRESSION(greater_than_or_equal_to)
+EVALUATE_EXPRESSION(equal_to)
+EVALUATE_EXPRESSION(not_equal_to)
 
-semantic_entities::expression_t
-evaluate_multiplication_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
-
-semantic_entities::expression_t
-evaluate_division_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
-
-semantic_entities::expression_t
-evaluate_modulo_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
-
-semantic_entities::expression_t
-evaluate_left_shift_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
-
-semantic_entities::expression_t
-evaluate_right_shift_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
-
-semantic_entities::expression_t
-evaluate_less_than_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
-
-semantic_entities::expression_t
-evaluate_less_than_or_equal_to_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
-
-semantic_entities::expression_t
-evaluate_greater_than_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
-
-semantic_entities::expression_t
-evaluate_greater_than_or_equal_to_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
-
-semantic_entities::expression_t
-evaluate_equal_to_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
-
-semantic_entities::expression_t
-evaluate_not_equal_to_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-);
+#undef EVALUATE_EXPRESSION
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 
