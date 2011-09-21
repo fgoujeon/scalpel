@@ -30,10 +30,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
-//
-//create expression from syntax nodes
-//
-
 template<class DeclarativeRegion>
 semantic_entities::expression_t
 create_expression
@@ -297,75 +293,6 @@ create_expression_from_identifier
 
 semantic_entities::expression_t
 create_expression_from_literal(const syntax_nodes::literal& literal_node);
-
-
-
-//
-//create and simplify expression objects
-//
-
-namespace expression_creation_or_evaluation_policies
-{
-
-#define BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(NAME) \
-struct NAME \
-{ \
-	static \
-	semantic_entities::expression_t \
-	evaluate \
-	( \
-		const semantic_entities::expression_t& left_operand, \
-		const semantic_entities::expression_t& right_operand \
-	) \
-	{ \
-		return evaluate_##NAME##_expression(left_operand, right_operand); \
-	} \
- \
-	static \
-	semantic_entities::expression_t \
-	create \
-	( \
-		semantic_entities::expression_t left_operand, \
-		semantic_entities::expression_t right_operand \
-	); \
-};
-
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(addition)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(subtraction)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(multiplication)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(division)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(modulo)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(left_shift)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(right_shift)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(less_than)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(less_than_or_equal_to)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(greater_than)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(greater_than_or_equal_to)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(equal_to)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(not_equal_to)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(bitwise_and)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(bitwise_exclusive_or)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(bitwise_inclusive_or)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(logical_and)
-	BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY(logical_or)
-
-#undef BINARY_EXPRESSION_CREATION_OR_EVALUATION_POLICY
-
-}
-
-template<class Policy>
-semantic_entities::expression_t
-create_or_evaluate_binary_expression
-(
-	const semantic_entities::expression_t& left_operand,
-	const semantic_entities::expression_t& right_operand
-)
-{
-	if(is_constant(left_operand) && is_constant(right_operand))
-		return Policy::evaluate(left_operand, right_operand);
-	else
-		return Policy::create(left_operand, right_operand);
-}
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

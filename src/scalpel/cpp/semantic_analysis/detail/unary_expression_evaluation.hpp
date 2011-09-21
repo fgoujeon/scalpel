@@ -18,16 +18,26 @@ You should have received a copy of the GNU Lesser General Public License
 along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_EXPRESSION_EVALUATION_HPP
-#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_EXPRESSION_EVALUATION_HPP
+#ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_UNARY_EXPRESSION_EVALUATION_HPP
+#define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_UNARY_EXPRESSION_EVALUATION_HPP
 
 #include <scalpel/cpp/semantic_graph.hpp>
 
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
-unsigned int
-evaluate_expression_to_unsigned_int(const semantic_entities::expression_t& expr);
+#define EVALUATE_EXPRESSION(NAME) \
+semantic_entities::expression_t \
+evaluate_##NAME##_expression \
+( \
+	const semantic_entities::expression_t& operand \
+);
+
+EVALUATE_EXPRESSION(negation)
+EVALUATE_EXPRESSION(logical_negation)
+EVALUATE_EXPRESSION(complement)
+
+#undef EVALUATE_EXPRESSION
 
 }}}} //namespace scalpel::cpp::semantic_analysis::detail
 

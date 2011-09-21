@@ -21,6 +21,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_EXPRESSION_CONSTRUCTION_IPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_EXPRESSION_CONSTRUCTION_IPP
 
+#include "expression_construction_or_evaluation.hpp"
 #include "function_call_construction.hpp"
 #include "member_access_expression_construction.hpp"
 #include "name_lookup.hpp"
@@ -649,17 +650,17 @@ create_expression_from_unary_operator_expression
 	else if(get<predefined_text_node<str::plus>>(&operator_node))
 		return operand;
 	else if(get<predefined_text_node<str::minus>>(&operator_node))
-		return semantic_entities::negation_expression
+		return create_or_evaluate_unary_expression<expression_creation_or_evaluation_policies::negation>
 		(
 			operand
 		);
 	else if(get<predefined_text_node<str::exclamation>>(&operator_node))
-		return semantic_entities::logical_negation_expression
+		return create_or_evaluate_unary_expression<expression_creation_or_evaluation_policies::logical_negation>
 		(
 			operand
 		);
 	else if(get<predefined_text_node<str::tilde>>(&operator_node))
-		return semantic_entities::complement_expression
+		return create_or_evaluate_unary_expression<expression_creation_or_evaluation_policies::complement>
 		(
 			operand
 		);
