@@ -89,7 +89,7 @@ init_unit_test()
 		std::vector<std::string> syntax_analysis_test_files = get_file_list("test/testfiles/syntax_analysis", boost::regex(".*\\.cpp"), true);
 
 		//add the syntax analysis test cases (one per test file) to the master test suite
-		boost::callback1<std::string> tm = boost::bind(&analysis::single_file_tester::parse_file, &analysis_single_file_tester, _1);
+		boost::callback1<std::string> tm = boost::bind(&analysis::single_file_tester::test_syntax_analysis, &analysis_single_file_tester, _1);
 		framework::master_test_suite().add(BOOST_PARAM_TEST_CASE(tm, syntax_analysis_test_files.begin(), syntax_analysis_test_files.end()));
 	}
 

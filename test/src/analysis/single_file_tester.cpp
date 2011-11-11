@@ -35,8 +35,8 @@ using namespace boost::spirit;
 namespace analysis
 {
 
-void
-single_file_tester::parse_file(const std::string& filename)
+scalpel::cpp::syntax_tree
+single_file_tester::test_syntax_analysis(const std::string& filename)
 {
 	//open file
 	std::ifstream file(filename.c_str());
@@ -56,10 +56,9 @@ single_file_tester::parse_file(const std::string& filename)
 	std::string preprocessed_code = preprocessor_(buffer.str(), include_paths_, macro_definitions_);
 
 	//syntax analysis
-	std::unique_ptr<scalpel::cpp::syntax_tree> tree;
 	try
 	{
-		tree = std::move(std::unique_ptr<scalpel::cpp::syntax_tree>(new scalpel::cpp::syntax_tree(syntax_analyzer_(preprocessed_code))));
+		return syntax_analyzer_(preprocessed_code);
 	}
 	catch(...)
 	{
@@ -77,25 +76,8 @@ single_file_tester::test_semantic_analysis(const semantic_analysis_test_file_set
 	const std::string& input_filename = file_set.input_file;
 	const std::string& expected_output_filename = file_set.output_file;
 
-	//open file
-	std::ifstream file(input_filename.c_str());
-	if(!file)
-	{
-		throw std::runtime_error("There's no file named " + input_filename + ".");
-	}
-
-	//read file
-	std::ostringstream buffer;
-	buffer << file.rdbuf();
-
-	//close file
-	file.close();
-
-	//preprocessing
-	std::string preprocessed_code = preprocessor_(buffer.str(), include_paths_, macro_definitions_);
-
 	//syntax analysis
-	scalpel::cpp::syntax_tree syntax_tree = syntax_analyzer_(preprocessed_code);
+	scalpel::cpp::syntax_tree syntax_tree = test_syntax_analysis(input_filename);
 
 	//semantic analysis
 	std::unique_ptr<scalpel::cpp::semantic_graph> semantic_graph;
@@ -128,17 +110,22 @@ single_file_tester::test_semantic_analysis(const semantic_analysis_test_file_set
 	expected_output_file.close();
 
 	//compare the results
-	BOOST_CHECK_EQUAL(semantic_graph_json.str(), expected_output_buffer.str());
+	if(semantic_graph_json.str() != expected_output_buffer.str())
+	{
+		std::ostringstream oss;
+		oss << "Semantic analysis error with:\n";
+		oss << "- input file = " << input_filename << '\n';
+		oss << "- test file = " << file_set.output_file;
+		BOOST_FAIL(oss.str());
+	}
 }
 
 void
 single_file_tester::test_linkage(const linkage_test_file_set& file_set)
 {
 	std::vector<std::unique_ptr<scalpel::cpp::semantic_graph>> semantic_graphs;
-	for(auto i = file_set.cpp_files.begin(); i != file_set.cpp_files.end(); ++i) //for each input file
+	for(const std::string& filename: file_set.cpp_files) //for each input file
 	{
-		const std::string& filename = *i;
-
 		//open file
 		std::ifstream file(filename.c_str());
 		if(!file)
@@ -201,7 +188,16 @@ single_file_tester::test_linkage(const linkage_test_file_set& file_set)
 	expected_output_file.close();
 
 	//compare the results
-	BOOST_CHECK_EQUAL(semantic_graph_json.str(), expected_output_buffer.str());
+	if(semantic_graph_json.str() != expected_output_buffer.str())
+	{
+		std::ostringstream oss;
+		oss << "Linkage error with:\n";
+		oss << "- input files =\n";
+		for(const std::string& filename: file_set.cpp_files)
+			oss << "  - " << filename << '\n';
+		oss << "- test file = " << file_set.output_file;
+		BOOST_FAIL(oss.str());
+	}
 }
 
 void

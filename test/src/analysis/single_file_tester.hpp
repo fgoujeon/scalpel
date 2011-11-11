@@ -32,8 +32,8 @@ namespace analysis
 class single_file_tester
 {
     public:
-        void
-        parse_file(const std::string& filename);
+		scalpel::cpp::syntax_tree
+        test_syntax_analysis(const std::string& filename);
 
         void
 		test_semantic_analysis(const semantic_analysis_test_file_set& file_set);
