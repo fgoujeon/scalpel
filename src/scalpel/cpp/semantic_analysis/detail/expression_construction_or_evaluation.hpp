@@ -21,7 +21,6 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_EXPRESSION_CONSTRUCTION_OR_EVALUATION_HPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_EXPRESSION_CONSTRUCTION_OR_EVALUATION_HPP
 
-#include "expression_construction_or_evaluation.hpp"
 #include "unary_expression_evaluation.hpp"
 #include "binary_expression_evaluation.hpp"
 #include <scalpel/cpp/semantic_graph.hpp>

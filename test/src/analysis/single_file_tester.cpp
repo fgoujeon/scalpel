@@ -115,7 +115,7 @@ single_file_tester::test_semantic_analysis(const semantic_analysis_test_file_set
 		std::ostringstream oss;
 		oss << "Semantic analysis error with:\n";
 		oss << "- input file = " << input_filename << '\n';
-		oss << "- test file = " << file_set.output_file;
+		oss << "- expected output file = " << file_set.output_file;
 		BOOST_FAIL(oss.str());
 	}
 }
@@ -195,7 +195,7 @@ single_file_tester::test_linkage(const linkage_test_file_set& file_set)
 		oss << "- input files =\n";
 		for(const std::string& filename: file_set.cpp_files)
 			oss << "  - " << filename << '\n';
-		oss << "- test file = " << file_set.output_file;
+		oss << "- expected output file = " << file_set.output_file;
 		BOOST_FAIL(oss.str());
 	}
 }

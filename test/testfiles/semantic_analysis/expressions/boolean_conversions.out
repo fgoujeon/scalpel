@@ -11,13 +11,7 @@
       },
       "default value":
       {
-        "conversion to bool":
-        {
-          "source value":
-          {
-            "int": 0
-          }
-        }
+        "bool": false
       }
     },
     {
@@ -36,13 +30,7 @@
       },
       "default value":
       {
-        "conversion to bool":
-        {
-          "source value":
-          {
-            "int": 1
-          }
-        }
+        "bool": true
       }
     },
     {
@@ -67,19 +55,7 @@
       },
       "default value":
       {
-        "conversion to bool":
-        {
-          "source value":
-          {
-            "negation":
-            {
-              "operand":
-              {
-                "int": 2
-              }
-            }
-          }
-        }
+        "bool": true
       }
     }
   ]

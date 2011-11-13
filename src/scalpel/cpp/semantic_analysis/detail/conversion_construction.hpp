@@ -61,38 +61,43 @@ CONVERSION_TO_TYPE(long double, long_double)
 
 
 
-//converts the given expression to T
-template<typename T>
-struct conversion_to_type_visitor: utility::static_visitor<T>
+//converts the given expression to Dest
+template<typename Dest>
+struct conversion_to_type_visitor: utility::static_visitor<Dest>
 {
 	conversion_to_type_visitor()
 	{
 	}
 
-	template<typename U>
-	T
-	operator()
-	(
-		const U& expr,
-		typename boost::enable_if<boost::is_arithmetic<U>>::type* = 0
-	) const
-	{
-		return expr;
-	}
-
-	T
+	//if the input expression is a variable
+	Dest
 	operator()(semantic_entities::variable* const var) const
 	{
+		//reapply the visitor to the default value of the variable
 		assert(var->default_value());
 		return apply_visitor(*this, *(var->default_value()));
 	}
 
-	template<class U>
-	T
+	//if the input expression has a fundamental type (except void)
+	template<typename Src>
+	Dest
 	operator()
 	(
-		const U&,
-		typename boost::disable_if<boost::is_arithmetic<U>>::type* = 0
+		const Src& expr,
+		typename boost::enable_if<boost::is_arithmetic<Src>>::type* = 0
+	) const
+	{
+		//let the compiler do the conversion
+		return expr;
+	}
+
+	//otherwise
+	template<class Src>
+	Dest
+	operator()
+	(
+		const Src&,
+		typename boost::disable_if<boost::is_arithmetic<Src>>::type* = 0
 	) const
 	{
 		assert(false);

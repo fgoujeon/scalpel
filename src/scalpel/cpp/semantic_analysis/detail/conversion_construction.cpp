@@ -32,8 +32,13 @@ namespace
 	class create_conversion_visitor: public utility::static_visitor<semantic_entities::expression_t>
 	{
 		public:
-			create_conversion_visitor(const semantic_entities::expression_t& expr):
-				expr_(expr)
+			create_conversion_visitor
+			(
+				const semantic_entities::expression_t& expr,
+				const bool evaluate
+			):
+				expr_(expr),
+				evaluate_(evaluate)
 			{
 			}
 
@@ -49,7 +54,7 @@ namespace
 				switch(type)
 				{
 					case fundamental_type::BOOL:
-						return create_conversion_to_type<bool>(expr_, false);
+						return create_conversion_to_type<bool>(expr_, evaluate_);
 					case fundamental_type::CHAR:
 					case fundamental_type::DOUBLE:
 					case fundamental_type::FLOAT:
@@ -152,6 +157,7 @@ namespace
 
 		private:
 			const semantic_entities::expression_t& expr_;
+			const bool evaluate_;
 	};
 }
 
@@ -168,7 +174,8 @@ create_conversion
 	}
 	else
 	{
-		create_conversion_visitor visitor(expr);
+		const bool evaluate = is_constant(expr);
+		create_conversion_visitor visitor(expr, evaluate);
 		return apply_visitor(visitor, destination_type);
 	}
 }
