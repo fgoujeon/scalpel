@@ -47,7 +47,7 @@ include_directories(
 include(FindBoost)
 find_package(
 	Boost 1.36.0
-	REQUIRED program_options regex
+	REQUIRED program_options regex system filesystem
 )
 link_directories(${Boost_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
