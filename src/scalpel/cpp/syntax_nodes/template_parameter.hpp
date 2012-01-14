@@ -1,6 +1,6 @@
 /*
 Scalpel _ Source Code Analysis, Libre and PortablE Library
-Copyright © 2008 - 2011  Florian Goujeon
+Copyright © 2008 - 2012  Florian Goujeon
 
 This file is part of Scalpel.
 
