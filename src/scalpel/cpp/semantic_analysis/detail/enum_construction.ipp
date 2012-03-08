@@ -21,6 +21,8 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_ENUM_CONSTRUCTION_IPP
 #define SCALPEL_CPP_SEMANTIC_ANALYSIS_DETAIL_ENUM_CONSTRUCTION_IPP
 
+#include "value_assignment.hpp"
+
 namespace scalpel { namespace cpp { namespace semantic_analysis { namespace detail
 {
 
@@ -32,6 +34,8 @@ fill_enum
 	const syntax_nodes::enum_specifier& enum_specifier_node
 )
 {
+	using namespace syntax_nodes;
+
 	int value_counter = 0;
 
 	if(const syntax_nodes::optional_node<syntax_nodes::enumerator_list>& opt_enumerator_list_node = get_enumerator_list(enum_specifier_node))
@@ -47,9 +51,17 @@ fill_enum
 				new semantic_entities::enum_constant<int>
 				(
 					get_identifier(enumerator_definition_node).value(),
-					value_counter++
+					value_counter
 				)
 			);
+
+			//assign a value to the enum constant
+			if(const optional_node<conditional_expression>& opt_conditional_expression = get_conditional_expression(enumerator_definition_node))
+			{
+				assign_value(*new_enum_constant, *opt_conditional_expression, enum_entity);
+			}
+
+			value_counter = new_enum_constant->value() + 1;
 
 			//add it to the enum
 			semantic_entities::enum_constant_list<int>& constant_list = utility::get<semantic_entities::enum_constant_list<int>>(enum_entity.constants());

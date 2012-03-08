@@ -58,6 +58,12 @@ class enum_constant
 			return value_;
 		}
 
+		void
+		value(UnderlyingType val)
+		{
+			value_ = val;
+		}
+
 	private:
 		std::string name_;
 		UnderlyingType value_;

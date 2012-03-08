@@ -22,12 +22,12 @@
             {
               "name": "GREEN",
               "id": "int-enum-constant-1",
-              "value": 1
+              "value": 4
             },
             {
               "name": "RED",
               "id": "int-enum-constant-2",
-              "value": 2
+              "value": 5
             }
           ]
         }
@@ -49,12 +49,12 @@
         {
           "name": "LEFT",
           "id": "int-enum-constant-3",
-          "value": 0
+          "value": -2
         },
         {
           "name": "RIGHT",
           "id": "int-enum-constant-4",
-          "value": 1
+          "value": -1
         }
       ]
     }

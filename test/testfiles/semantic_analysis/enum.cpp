@@ -3,14 +3,14 @@ class s
 	enum color
 	{
 		BLUE,
-		GREEN,
+		GREEN = 4,
 		RED
 	};
 };
 
 enum direction
 {
-	LEFT,
+	LEFT = -2,
 	RIGHT,
 };
 

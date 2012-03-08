@@ -28,6 +28,7 @@ along with Scalpel.  If not, see <http://www.gnu.org/licenses/>.
 #include "function_construction.hpp"
 #include "type_construction.hpp"
 #include "other_entity_construction.hpp"
+#include "value_assignment.hpp"
 #include "semantic_entity_analysis/identification_policies.hpp"
 #include "syntax_node_analysis/class_specifier.hpp"
 #include "syntax_node_analysis/function_definition.hpp"
@@ -213,16 +214,7 @@ fill_namespace
 					if(const boost::optional<const syntax_nodes::assignment_expression&>& opt_assignment_expression_node = get<syntax_nodes::assignment_expression>(&initializer_clause_node))
 					{
 						const syntax_nodes::assignment_expression& assignment_expression_node = *opt_assignment_expression_node;
-
-						if(variable** opt_variable = get<variable*>(&declarator_entity))
-						{
-							variable& var = **opt_variable;
-
-							semantic_entities::expression_t expr = create_expression_from_assignment_expression(assignment_expression_node, namespace_entity);
-							expr = create_conversion(expr, var.type());
-
-							var.default_value(expr);
-						}
+						assign_value(declarator_entity, assignment_expression_node, namespace_entity);
 					}
 				}
 			}
